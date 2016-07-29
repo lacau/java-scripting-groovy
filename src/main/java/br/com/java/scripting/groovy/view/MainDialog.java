@@ -6,6 +6,8 @@ package br.com.java.scripting.groovy.view;
 
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
@@ -40,6 +42,16 @@ public class MainDialog extends JDialog {
         panelMenu.add(btScripts);
 
         Button btLoadScript = new Button("scripts");
+        btLoadScript.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                ScriptsDialog dialog = new ScriptsDialog();
+                dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
+                dialog.setModal(true);
+                dialog.setLocationRelativeTo(contentPanel);
+                dialog.setVisible(true);
+            }
+        });
         btLoadScript.setBounds(10, 45, 100, 23);
         panelMenu.add(btLoadScript);
 
