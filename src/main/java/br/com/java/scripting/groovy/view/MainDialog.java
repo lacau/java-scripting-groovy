@@ -18,6 +18,8 @@ public class MainDialog extends JDialog {
 
     private final JPanel contentPanel = new JPanel();
 
+    private static DrawPanel drawPanel;
+
     /**
      * Create the dialog.
      */
@@ -65,9 +67,13 @@ public class MainDialog extends JDialog {
         contentPanel.add(panelBorder);
         panelBorder.setLayout(null);
 
-        JPanel panelDraw = new DrawPanel();
-        panelDraw.setBounds(10, 10, 624, 536);
-        panelBorder.add(panelDraw);
-        panelDraw.setLayout(null);
+        drawPanel = new DrawPanel();
+        drawPanel.setBounds(10, 10, 624, 536);
+        panelBorder.add(drawPanel);
+        drawPanel.setLayout(null);
+    }
+
+    public static DrawPanel getDrawPanel() {
+        return drawPanel;
     }
 }

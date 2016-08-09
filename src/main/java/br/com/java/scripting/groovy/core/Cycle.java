@@ -11,5 +11,7 @@ public interface Cycle {
 
     Geometry afterStep();
 
-    long getInterval();
+    default long getInterval() {
+        return 100;
+    }
 }

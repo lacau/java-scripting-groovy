@@ -28,6 +28,6 @@ public class CycleImpl implements Cycle {
 
     @Override
     public long getInterval() {
-        return 100;
+        return 50;
     }
 }
