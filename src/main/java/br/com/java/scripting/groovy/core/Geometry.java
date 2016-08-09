@@ -8,11 +8,11 @@ import java.awt.Point;
  */
 public class Geometry {
 
-    Point points[];
+    private Point points[];
 
-    Color borderColor;
+    private Color borderColor;
 
-    int borderSize;
+    private int borderSize;
 
     public Geometry(Point[] points, Color borderColor, int borderSize) {
         this.points = points;
