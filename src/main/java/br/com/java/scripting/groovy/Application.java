@@ -2,14 +2,12 @@ package br.com.java.scripting.groovy;
 
 import javax.swing.JDialog;
 
+import br.com.java.scripting.groovy.core.Engine;
 import br.com.java.scripting.groovy.view.MainDialog;
-import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * Created by lacau on 27/07/16.
  */
-@SpringBootApplication
 public class Application {
 
     /**
@@ -19,7 +17,8 @@ public class Application {
         MainDialog dialog = new MainDialog();
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        SpringApplication.run(Application.class, args);
+        Engine engine = new Engine();
+        new Thread(engine).start();
 
         dialog.setVisible(true);
     }

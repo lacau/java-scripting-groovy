@@ -24,20 +24,26 @@ public class DrawPanel extends JPanel {
     }
 
     @Override
-    public void paint(Graphics graphics) {
+    protected void paintComponent(Graphics graphics) {
         final Graphics2D g = (Graphics2D) graphics;
         if(stage != null && geometry != null) {
-            final Point[] points = geometry.getPoints();
+            g.setColor(stage.getBackgroundColor());
+            g.fillRect(0, 0, stage.getWidth(), stage.getHeight());
 
+            final Point[] points = geometry.getPoints();
             g.setColor(geometry.getBorderColor());
             g.setStroke(new BasicStroke(geometry.getBorderSize()));
 
-            for(int i = 0; i < points.length - 1; i++) {
-                g.drawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+            for(int i = 0; i < points.length; i++) {
+                if(i != points.length - 1) {
+                    g.drawLine(points[i].x, points[i].y, points[i + 1].x, points[i + 1].y);
+                } else {
+                    g.drawLine(points[i].x, points[i].y, points[0].x, points[0].y);
+                }
             }
+        } else {
+            super.paintComponent(g);
         }
-
-        super.paint(g);
     }
 
     public Stage getStage() {
