@@ -65,8 +65,7 @@ public class MainDialog extends JDialog {
         contentPanel.add(panelBorder);
         panelBorder.setLayout(null);
 
-        JPanel panelDraw = new JPanel();
-        panelDraw.setBackground(new Color(0, 0, 0));
+        JPanel panelDraw = new DrawPanel();
         panelDraw.setBounds(10, 10, 624, 536);
         panelBorder.add(panelDraw);
         panelDraw.setLayout(null);
