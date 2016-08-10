@@ -12,8 +12,6 @@ import br.com.java.scripting.groovy.view.MainDialog;
  */
 public class Application {
 
-    private static Thread engineThread;
-
     /**
      * Launch the application.
      */
@@ -22,8 +20,7 @@ public class Application {
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         Engine engine = new Engine();
-        engineThread = new Thread(engine);
-        engineThread.start();
+        engine.start();
 
         try {
             GitService.getInstance().init();
@@ -34,9 +31,5 @@ public class Application {
         }
 
         dialog.setVisible(true);
-    }
-
-    public static Thread getEngineThread() {
-        return engineThread;
     }
 }

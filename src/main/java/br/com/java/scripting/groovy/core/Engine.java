@@ -3,31 +3,33 @@ package br.com.java.scripting.groovy.core;
 import java.awt.Color;
 import java.awt.Point;
 
-import br.com.java.scripting.groovy.Application;
+import br.com.java.scripting.groovy.util.CycleHolder;
 import br.com.java.scripting.groovy.view.DrawPanel;
 import br.com.java.scripting.groovy.view.MainDialog;
 
 /**
  * Created by lacau on 09/08/16.
  */
-public class Engine implements Runnable {
+public class Engine extends Thread {
 
     private DrawPanel drawPanel;
 
-    private Cycle cycle;
-
     private Stage stage;
+
+    private static Engine self;
 
     public Engine() {
         drawPanel = MainDialog.getDrawPanel();
-        cycle = new CycleImpl(); // Should be load dynamically
+        CycleHolder.refresh(new CycleImpl());
         stage = new Stage(drawPanel.getWidth(), drawPanel.getHeight());
         drawPanel.setStage(stage);
         drawPanel.setGeometry(createGeometry());
+        self = this;
     }
 
     @Override
     public void run() {
+        Cycle cycle = CycleHolder.get();
         cycle.init(drawPanel.getStage(), drawPanel.getGeometry());
 
         try {
@@ -42,7 +44,7 @@ public class Engine implements Runnable {
                 Thread.sleep(cycle.getInterval());
             }
         } catch(InterruptedException e) {
-            System.out.println("Engine thread interrupted.");
+            System.out.println(getName() + " - Engine thread interrupted.");
         }
     }
 
@@ -56,6 +58,6 @@ public class Engine implements Runnable {
     }
 
     public static void kill() {
-        Application.getEngineThread().interrupt();
+        self.interrupt();
     }
 }
