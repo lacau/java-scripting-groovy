@@ -1,8 +1,10 @@
 package br.com.java.scripting.groovy;
 
+import java.io.IOException;
 import javax.swing.JDialog;
 
 import br.com.java.scripting.groovy.core.Engine;
+import br.com.java.scripting.groovy.service.GitService;
 import br.com.java.scripting.groovy.view.MainDialog;
 
 /**
@@ -22,6 +24,14 @@ public class Application {
         Engine engine = new Engine();
         engineThread = new Thread(engine);
         engineThread.start();
+
+        try {
+            GitService.getInstance().init();
+        } catch(IOException e) {
+            System.out.println("ERROR: IOException, application crash.");
+            Engine.kill();
+            System.exit(0);
+        }
 
         dialog.setVisible(true);
     }
