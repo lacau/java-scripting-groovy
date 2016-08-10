@@ -10,6 +10,8 @@ import br.com.java.scripting.groovy.view.MainDialog;
  */
 public class Application {
 
+    private static Thread engineThread;
+
     /**
      * Launch the application.
      */
@@ -18,8 +20,13 @@ public class Application {
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         Engine engine = new Engine();
-        new Thread(engine).start();
+        engineThread = new Thread(engine);
+        engineThread.start();
 
         dialog.setVisible(true);
+    }
+
+    public static Thread getEngineThread() {
+        return engineThread;
     }
 }

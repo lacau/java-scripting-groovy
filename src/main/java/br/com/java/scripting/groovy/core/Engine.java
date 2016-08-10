@@ -3,6 +3,7 @@ package br.com.java.scripting.groovy.core;
 import java.awt.Color;
 import java.awt.Point;
 
+import br.com.java.scripting.groovy.Application;
 import br.com.java.scripting.groovy.view.DrawPanel;
 import br.com.java.scripting.groovy.view.MainDialog;
 
@@ -29,19 +30,19 @@ public class Engine implements Runnable {
     public void run() {
         cycle.init(drawPanel.getStage(), drawPanel.getGeometry());
 
-        while(true) {
-            cycle.beforeStep();
+        try {
+            while(true) {
+                cycle.beforeStep();
 
-            drawPanel.invalidate();
-            drawPanel.repaint();
+                drawPanel.invalidate();
+                drawPanel.repaint();
 
-            cycle.afterStep();
+                cycle.afterStep();
 
-            try {
                 Thread.sleep(cycle.getInterval());
-            } catch(InterruptedException e) {
-                e.printStackTrace();
             }
+        } catch(InterruptedException e) {
+            System.out.println("Engine thread interrupted.");
         }
     }
 
@@ -52,5 +53,9 @@ public class Engine implements Runnable {
         Point p4 = new Point(50, 0);
 
         return new Geometry(new Point[] {p1, p2, p3, p4}, Color.red, 1);
+    }
+
+    public static void kill() {
+        Application.getEngineThread().interrupt();
     }
 }

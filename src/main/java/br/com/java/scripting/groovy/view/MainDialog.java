@@ -8,11 +8,17 @@ import java.awt.Button;
 import java.awt.Color;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import javax.swing.JDialog;
 import javax.swing.JPanel;
+import javax.swing.WindowConstants;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
+
+import br.com.java.scripting.groovy.core.Engine;
+import br.com.java.scripting.groovy.util.GroovyFileChooser;
 
 public class MainDialog extends JDialog {
 
@@ -33,18 +39,34 @@ public class MainDialog extends JDialog {
         getContentPane().add(contentPanel);
         contentPanel.setLayout(null);
 
+        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                Engine.kill();
+                dispose();
+            }
+        });
+
         JPanel panelMenu = new JPanel();
         panelMenu.setBorder(new TitledBorder(new LineBorder(new Color(0, 0, 0)), "Menu", TitledBorder.LEFT, TitledBorder.TOP, null, new Color(51, 51, 51)));
         panelMenu.setBounds(668, 12, 120, 179);
         contentPanel.add(panelMenu);
         panelMenu.setLayout(null);
 
-        Button btScripts = new Button("load script");
-        btScripts.setBounds(10, 15, 100, 23);
-        panelMenu.add(btScripts);
-
-        Button btLoadScript = new Button("scripts");
+        Button btLoadScript = new Button("load script");
         btLoadScript.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                GroovyFileChooser fileChooser = new GroovyFileChooser();
+                fileChooser.showOpenDialog(MainDialog.this);
+            }
+        });
+        btLoadScript.setBounds(10, 15, 100, 23);
+        panelMenu.add(btLoadScript);
+
+        Button btScripts = new Button("scripts");
+        btScripts.addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
                 ScriptsDialog dialog = new ScriptsDialog();
@@ -54,8 +76,8 @@ public class MainDialog extends JDialog {
                 dialog.setVisible(true);
             }
         });
-        btLoadScript.setBounds(10, 45, 100, 23);
-        panelMenu.add(btLoadScript);
+        btScripts.setBounds(10, 45, 100, 23);
+        panelMenu.add(btScripts);
 
         Button btRun = new Button("RUN");
         btRun.setBounds(10, 75, 100, 23);
