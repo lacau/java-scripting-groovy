@@ -4,6 +4,7 @@ import java.io.IOException;
 import javax.swing.JDialog;
 
 import br.com.java.scripting.groovy.core.Engine;
+import br.com.java.scripting.groovy.core.MonitorTask;
 import br.com.java.scripting.groovy.service.GitService;
 import br.com.java.scripting.groovy.view.MainDialog;
 
@@ -19,8 +20,8 @@ public class Application {
         MainDialog dialog = new MainDialog();
         dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
-        Engine engine = new Engine();
-        engine.start();
+        MonitorTask monitorTask = new MonitorTask();
+        monitorTask.start();
 
         try {
             GitService.getInstance().init();
