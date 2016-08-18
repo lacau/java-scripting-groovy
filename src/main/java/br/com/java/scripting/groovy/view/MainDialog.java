@@ -17,7 +17,7 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
-import br.com.java.scripting.groovy.core.Engine;
+import br.com.java.scripting.groovy.core.MonitorTask;
 import br.com.java.scripting.groovy.util.GroovyFileChooser;
 
 public class MainDialog extends JDialog {
@@ -43,7 +43,7 @@ public class MainDialog extends JDialog {
         addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                Engine.kill();
+                MonitorTask.kill();
                 dispose();
             }
         });

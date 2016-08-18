@@ -1,9 +1,7 @@
 package br.com.java.scripting.groovy;
 
 import java.io.IOException;
-import javax.swing.JDialog;
 
-import br.com.java.scripting.groovy.core.Engine;
 import br.com.java.scripting.groovy.core.MonitorTask;
 import br.com.java.scripting.groovy.service.GitService;
 import br.com.java.scripting.groovy.view.MainDialog;
@@ -18,7 +16,6 @@ public class Application {
      */
     public static void main(String[] args) {
         MainDialog dialog = new MainDialog();
-        dialog.setDefaultCloseOperation(JDialog.DISPOSE_ON_CLOSE);
 
         MonitorTask monitorTask = new MonitorTask();
         monitorTask.start();
@@ -27,7 +24,7 @@ public class Application {
             GitService.getInstance().init();
         } catch(IOException e) {
             System.out.println("ERROR: IOException, application crash.");
-            Engine.kill();
+            MonitorTask.kill();
             System.exit(0);
         }
 

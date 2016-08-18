@@ -10,21 +10,19 @@ import br.com.java.scripting.groovy.view.MainDialog;
 /**
  * Created by lacau on 09/08/16.
  */
-public class Engine extends Thread {
+public class EngineTask extends Thread {
 
     private DrawPanel drawPanel;
 
     private Stage stage;
 
-    private static Engine self;
-
-    public Engine() {
+    public EngineTask() {
+        System.out.println("Start EngineTask.");
         drawPanel = MainDialog.getDrawPanel();
         CycleHolder.refresh(new CycleImpl());
         stage = new Stage(drawPanel.getWidth(), drawPanel.getHeight());
         drawPanel.setStage(stage);
         drawPanel.setGeometry(createGeometry());
-        self = this;
     }
 
     @Override
@@ -44,7 +42,7 @@ public class Engine extends Thread {
                 Thread.sleep(cycle.getInterval());
             }
         } catch(InterruptedException e) {
-            System.out.println(getName() + " - Engine thread interrupted.");
+            System.out.println(getName() + " - EngineTask thread interrupted.");
         }
     }
 
@@ -55,9 +53,5 @@ public class Engine extends Thread {
         Point p4 = new Point(50, 0);
 
         return new Geometry(new Point[] {p1, p2, p3, p4}, Color.red, 1);
-    }
-
-    public static void kill() {
-        self.interrupt();
     }
 }

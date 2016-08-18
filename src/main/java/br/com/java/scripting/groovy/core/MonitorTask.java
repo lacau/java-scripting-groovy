@@ -5,30 +5,37 @@ package br.com.java.scripting.groovy.core;
  */
 public class MonitorTask extends Thread {
 
-    private Engine engine;
+    private EngineTask engine;
 
     private boolean running;
 
+    private static volatile boolean alive;
+
+    private static MonitorTask self;
+
     public MonitorTask() {
+        alive = true;
         running = true;
+        self = this;
     }
 
     @Override
     public void run() {
-        while(true) {
+        while(alive) {
             if(running) {
                 if(engine != null) {
-                    engine.kill();
+                    engine.interrupt();
                     if(engine.isAlive()) {
                         continue;
                     }
                 }
 
-                engine = new Engine();
+                engine = new EngineTask();
                 engine.start();
                 hold();
             }
         }
+        System.out.println(getName() + " - MonitorTask thread stopped.");
     }
 
     public void hold() {
@@ -37,5 +44,10 @@ public class MonitorTask extends Thread {
 
     public void release() {
         running = true;
+    }
+
+    public static void kill() {
+        self.engine.interrupt();
+        alive = false;
     }
 }
