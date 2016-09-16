@@ -16,6 +16,7 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.revwalk.RevCommit;
 import org.eclipse.jgit.treewalk.TreeWalk;
+import org.eclipse.jgit.treewalk.filter.PathFilter;
 
 /**
  * Created by lacau on 10/08/16.
@@ -27,11 +28,9 @@ public class GitService {
     private static final String PATH = "files";
 
     private Repository localRepository;
-
     static {
         INSTANCE = new GitService();
     }
-
     public static GitService getInstance() {
         return INSTANCE;
     }
@@ -79,6 +78,39 @@ public class GitService {
                 walker.getObjectId(0).copyTo(fos);
                 fos.close();
                 files.add(file);
+            }
+        } catch(GitAPIException e) {
+            System.out.println(MessageFactory.createMessage(MessageType.WARNING, "could not found any branches into repository."));
+        } catch(IOException e) {
+            System.out.println(MessageFactory.createMessage(MessageType.ERROR, "could not read files from repository."));
+        }
+
+        return files;
+    }
+
+    public List<File> listFileRevision(String fileName) {
+        Git git = new Git(localRepository);
+        List<File> files = new ArrayList<>();
+
+        try(TreeWalk walker = new TreeWalk(localRepository)) {
+            walker.setRecursive(true);
+
+            List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
+            if(branches.isEmpty())
+                throw new GitAPIException("") {
+                };
+
+            Iterable<RevCommit> commits = git.log().add(localRepository.resolve(branches.get(0).getName())).call();
+            for(RevCommit commit : commits) {
+                walker.addTree(commit.getTree());
+                walker.setFilter(PathFilter.create(fileName));
+                while(walker.next()) {
+                    File file = new File(walker.getNameString());
+                    FileOutputStream fos = new FileOutputStream(file);
+                    walker.getObjectId(0).copyTo(fos);
+                    fos.close();
+                    files.add(file);
+                }
             }
         } catch(GitAPIException e) {
             System.out.println(MessageFactory.createMessage(MessageType.WARNING, "could not found any branches into repository."));
