@@ -9,15 +9,17 @@ public class CycleImpl implements Cycle {
 
     private Geometry geometry;
 
+    private static final long INTERVAL = 50L;
+
     @Override
     public void init(Stage stage, Geometry geometry) {
         this.geometry = geometry;
-        stage.setBackgroundColor(Color.gray);
+        stage.setBackgroundColor(Color.black);
     }
 
     @Override
     public Geometry beforeStep() {
-        geometry.setBorderColor(Color.red);
+        geometry.setBorderColor(Color.white);
         return geometry;
     }
 
@@ -28,6 +30,6 @@ public class CycleImpl implements Cycle {
 
     @Override
     public long getInterval() {
-        return 50;
+        return INTERVAL;
     }
 }

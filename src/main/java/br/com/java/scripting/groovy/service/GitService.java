@@ -1,12 +1,19 @@
 package br.com.java.scripting.groovy.service;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.internal.storage.file.FileRepository;
+import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
+import org.eclipse.jgit.revwalk.RevCommit;
+import org.eclipse.jgit.treewalk.TreeWalk;
 
 /**
  * Created by lacau on 10/08/16.
@@ -18,9 +25,11 @@ public class GitService {
     private static final String PATH = "files";
 
     private Repository localRepository;
+
     static {
         INSTANCE = new GitService();
     }
+
     public static GitService getInstance() {
         return INSTANCE;
     }
@@ -45,6 +54,33 @@ public class GitService {
         } catch(GitAPIException e) {
             System.out.println(String.format("ERROR: could not commit file '%s'", fileName));
         }
+    }
+
+    public List<File> listFiles() {
+        Git git = new Git(localRepository);
+        List<File> files = new ArrayList<>();
+
+        try(TreeWalk walker = new TreeWalk(localRepository)) {
+            walker.setRecursive(true);
+            List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
+            Iterable<RevCommit> call = git.log().add(localRepository.resolve(branches.get(0).getName())).call();
+
+            RevCommit c = call.iterator().next();
+            walker.addTree(c.getTree());
+            while(walker.next()) {
+                File file = new File(walker.getNameString());
+                FileOutputStream fos = new FileOutputStream(file);
+                walker.getObjectId(0).copyTo(fos);
+                fos.close();
+                files.add(file);
+            }
+        } catch(GitAPIException e) {
+            System.out.println("WARNING: could not found any branches into repository.");
+        } catch(IOException e) {
+            System.out.println("ERROR: could not read files from repository.");
+        }
+
+        return files;
     }
 
     private void createDirectory() {
