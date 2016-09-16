@@ -17,7 +17,7 @@ public class DrawPanel extends JPanel {
 
     private Stage stage;
 
-    private Geometry geometry;
+    private volatile Geometry geometry;
 
     public DrawPanel() {
         setBackground(Color.black);
@@ -25,6 +25,7 @@ public class DrawPanel extends JPanel {
 
     @Override
     protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
         final Graphics2D g = (Graphics2D) graphics;
         if(stage != null && geometry != null) {
             g.setColor(stage.getBackgroundColor());
@@ -41,8 +42,6 @@ public class DrawPanel extends JPanel {
                     g.drawLine(points[i].x, points[i].y, points[0].x, points[0].y);
                 }
             }
-        } else {
-            super.paintComponent(g);
         }
     }
 

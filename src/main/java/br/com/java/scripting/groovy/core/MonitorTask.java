@@ -21,19 +21,25 @@ public class MonitorTask extends Thread {
 
     @Override
     public void run() {
-        while(alive) {
-            if(running) {
-                if(engine != null) {
-                    engine.interrupt();
-                    if(engine.isAlive()) {
-                        continue;
+        try {
+            while(alive) {
+                if(running) {
+                    if(engine != null) {
+                        engine.interrupt();
+                        if(engine.isAlive()) {
+                            continue;
+                        }
                     }
+
+                    engine = new EngineTask();
+                    engine.start();
+                    hold();
                 }
 
-                engine = new EngineTask();
-                engine.start();
-                hold();
+                Thread.sleep(3000);
             }
+        } catch(InterruptedException e) {
+            System.out.println(getName() + " - MonitorTask thread interrupted.");
         }
         System.out.println(getName() + " - MonitorTask thread stopped.");
     }
