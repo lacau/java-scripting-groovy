@@ -28,9 +28,13 @@ public class GitService {
     private static final String PATH = "files";
 
     private Repository localRepository;
+
+    private Git git;
+
     static {
         INSTANCE = new GitService();
     }
+
     public static GitService getInstance() {
         return INSTANCE;
     }
@@ -45,8 +49,6 @@ public class GitService {
     }
 
     public void commitFile(File file) {
-        Git git = new Git(localRepository);
-
         final String fileName = file.getName();
         try {
             git.add().addFilepattern(fileName).call();
@@ -104,7 +106,6 @@ public class GitService {
     }
 
     private Iterable<RevCommit> getCommitsFromMaster() throws GitAPIException, IOException {
-        Git git = new Git(localRepository);
         List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
         if(branches.isEmpty())
             throw new GitAPIException("") {};
@@ -135,5 +136,6 @@ public class GitService {
         } catch(IllegalStateException e) {
             System.out.println(MessageFactory.createMessage(MessageType.WARNING, "repository already exists."));
         }
+        git = new Git(localRepository);
     }
 }
