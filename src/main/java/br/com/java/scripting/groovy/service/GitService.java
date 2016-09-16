@@ -58,25 +58,16 @@ public class GitService {
     }
 
     public List<File> listFiles() {
-        Git git = new Git(localRepository);
         List<File> files = new ArrayList<>();
 
         try(TreeWalk walker = new TreeWalk(localRepository)) {
             walker.setRecursive(true);
-            List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
-            if(branches.isEmpty())
-                throw new GitAPIException("") {
-                };
-
-            Iterable<RevCommit> call = git.log().add(localRepository.resolve(branches.get(0).getName())).call();
+            Iterable<RevCommit> call = getCommitsFromMaster();
 
             RevCommit c = call.iterator().next();
             walker.addTree(c.getTree());
             while(walker.next()) {
-                File file = new File(walker.getNameString());
-                FileOutputStream fos = new FileOutputStream(file);
-                walker.getObjectId(0).copyTo(fos);
-                fos.close();
+                File file = createFile(walker);
                 files.add(file);
             }
         } catch(GitAPIException e) {
@@ -88,27 +79,18 @@ public class GitService {
         return files;
     }
 
-    public List<File> listFileRevision(String fileName) {
-        Git git = new Git(localRepository);
+    public List<File> listFileRevisions(String fileName) {
         List<File> files = new ArrayList<>();
 
         try(TreeWalk walker = new TreeWalk(localRepository)) {
             walker.setRecursive(true);
 
-            List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
-            if(branches.isEmpty())
-                throw new GitAPIException("") {
-                };
-
-            Iterable<RevCommit> commits = git.log().add(localRepository.resolve(branches.get(0).getName())).call();
+            Iterable<RevCommit> commits = getCommitsFromMaster();
             for(RevCommit commit : commits) {
                 walker.addTree(commit.getTree());
                 walker.setFilter(PathFilter.create(fileName));
                 while(walker.next()) {
-                    File file = new File(walker.getNameString());
-                    FileOutputStream fos = new FileOutputStream(file);
-                    walker.getObjectId(0).copyTo(fos);
-                    fos.close();
+                    File file = createFile(walker);
                     files.add(file);
                 }
             }
@@ -119,6 +101,23 @@ public class GitService {
         }
 
         return files;
+    }
+
+    private Iterable<RevCommit> getCommitsFromMaster() throws GitAPIException, IOException {
+        Git git = new Git(localRepository);
+        List<Ref> branches = git.branchList().setListMode(ListBranchCommand.ListMode.ALL).call();
+        if(branches.isEmpty())
+            throw new GitAPIException("") {};
+
+        return git.log().add(localRepository.resolve(branches.get(0).getName())).call();
+    }
+
+    private File createFile(TreeWalk walker) throws IOException {
+        File file = new File(walker.getNameString());
+        FileOutputStream fos = new FileOutputStream(file);
+        walker.getObjectId(0).copyTo(fos);
+        fos.close();
+        return file;
     }
 
     private void createDirectory() {
