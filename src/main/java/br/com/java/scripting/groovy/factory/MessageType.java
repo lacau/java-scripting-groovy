@@ -1,4 +1,4 @@
-package br.com.java.scripting.groovy.util;
+package br.com.java.scripting.groovy.factory;
 
 /**
  * Created by Lacau on 16/09/2016.

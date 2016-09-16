@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.java.scripting.groovy.util.MessageFactory;
-import br.com.java.scripting.groovy.util.MessageType;
+import br.com.java.scripting.groovy.factory.MessageFactory;
+import br.com.java.scripting.groovy.factory.MessageType;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
