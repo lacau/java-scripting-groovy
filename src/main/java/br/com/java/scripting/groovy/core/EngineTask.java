@@ -35,23 +35,28 @@ public class EngineTask extends Thread {
         long lastTime = System.currentTimeMillis();
         long lastRenderTime = System.currentTimeMillis();
 
-        while(true) {
-            if(System.currentTimeMillis() - lastTime >= 1000) {
-                drawPanel.setFps(fps);
-                lastTime = System.currentTimeMillis();
-                fps = 0;
+        try {
+            while(true) {
+                if(System.currentTimeMillis() - lastTime >= 1000) {
+                    drawPanel.setFps(fps);
+                    lastTime = System.currentTimeMillis();
+                    fps = 0;
+                }
+
+                fps++;
+                if(System.currentTimeMillis() - lastRenderTime > cycle.getInterval()) {
+                    drawPanel.setGeometry(cycle.beforeStep());
+
+                    drawPanel.invalidate();
+                    drawPanel.repaint();
+
+                    drawPanel.setGeometry(cycle.afterStep());
+                    lastRenderTime = System.currentTimeMillis();
+                }
+                Thread.sleep(1);
             }
-
-            fps++;
-            if(System.currentTimeMillis() - lastRenderTime > cycle.getInterval()) {
-                drawPanel.setGeometry(cycle.beforeStep());
-
-                drawPanel.invalidate();
-                drawPanel.repaint();
-
-                drawPanel.setGeometry(cycle.afterStep());
-                lastRenderTime = System.currentTimeMillis();
-            }
+        } catch(InterruptedException e) {
+            System.out.println(getName() + " - EngineTask thread interrupted.");
         }
     }
 
