@@ -19,6 +19,8 @@ public class DrawPanel extends JPanel {
 
     private volatile Geometry geometry;
 
+    private int fps = 0;
+
     public DrawPanel() {
         setBackground(Color.black);
     }
@@ -30,6 +32,9 @@ public class DrawPanel extends JPanel {
         if(stage != null && geometry != null) {
             g.setColor(stage.getBackgroundColor());
             g.fillRect(0, 0, stage.getWidth(), stage.getHeight());
+
+            g.setColor(Color.white);
+            g.drawString("fps: " + fps, 5, 12);
 
             final Point[] points = geometry.getPoints();
             g.setColor(geometry.getBorderColor());
@@ -59,5 +64,9 @@ public class DrawPanel extends JPanel {
 
     public void setGeometry(Geometry geometry) {
         this.geometry = geometry;
+    }
+
+    public void setFps(int fps) {
+        this.fps = fps;
     }
 }
