@@ -16,6 +16,8 @@ public class EngineTask extends Thread {
 
     private Stage stage;
 
+    private int fps;
+
     public EngineTask() {
         System.out.println("Start EngineTask.");
         drawPanel = MainDialog.getDrawPanel();
@@ -30,19 +32,26 @@ public class EngineTask extends Thread {
         Cycle cycle = CycleHolder.get();
         cycle.init(drawPanel.getStage(), drawPanel.getGeometry());
 
-        try {
-            while(true) {
-                cycle.beforeStep();
+        long lastTime = System.currentTimeMillis();
+        long lastRenderTime = System.currentTimeMillis();
+
+        while(true) {
+            if(System.currentTimeMillis() - lastTime >= 1000) {
+                drawPanel.setFps(fps);
+                lastTime = System.currentTimeMillis();
+                fps = 0;
+            }
+
+            fps++;
+            if(System.currentTimeMillis() - lastRenderTime > cycle.getInterval()) {
+                drawPanel.setGeometry(cycle.beforeStep());
 
                 drawPanel.invalidate();
                 drawPanel.repaint();
 
-                cycle.afterStep();
-
-                Thread.sleep(cycle.getInterval());
+                drawPanel.setGeometry(cycle.afterStep());
+                lastRenderTime = System.currentTimeMillis();
             }
-        } catch(InterruptedException e) {
-            System.out.println(getName() + " - EngineTask thread interrupted.");
         }
     }
 
