@@ -33,10 +33,12 @@ public class DrawPanel extends JPanel {
             g.setColor(stage.getBackgroundColor());
             g.fillRect(0, 0, stage.getWidth(), stage.getHeight());
 
-            g.setColor(Color.white);
-            g.drawString("fps: " + fps, 5, 12);
-
             final Point[] points = geometry.getPoints();
+
+            g.setColor(Color.white);
+            g.drawString("vertices: " + points.length, 5, 12);
+            g.drawString("fps: " + fps, 5, 24);
+
             g.setColor(geometry.getBorderColor());
             g.setStroke(new BasicStroke(geometry.getBorderSize()));
 
