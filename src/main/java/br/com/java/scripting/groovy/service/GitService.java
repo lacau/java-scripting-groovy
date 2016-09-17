@@ -6,8 +6,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import br.com.java.scripting.groovy.factory.MessageFactory;
-import br.com.java.scripting.groovy.factory.MessageType;
+import br.com.java.scripting.groovy.message.Message;
+import br.com.java.scripting.groovy.message.MessageType;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.api.ListBranchCommand;
 import org.eclipse.jgit.api.errors.GitAPIException;
@@ -53,9 +53,9 @@ public class GitService {
         try {
             git.add().addFilepattern(fileName).call();
             git.commit().setMessage(String.format("Add file '%s'", fileName)).call();
-            System.out.println(MessageFactory.createMessage(MessageType.INFO, "file '%s' was committed.", fileName));
+            System.out.println(Message.createMessage(MessageType.INFO, "file '%s' was committed.", fileName));
         } catch(GitAPIException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.ERROR, "could not commit file '%s'", fileName));
+            System.out.println(Message.createMessage(MessageType.ERROR, "could not commit file '%s'", fileName));
         }
     }
 
@@ -73,9 +73,9 @@ public class GitService {
                 files.add(file);
             }
         } catch(GitAPIException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.WARNING, "could not found any branches into repository."));
+            System.out.println(Message.createMessage(MessageType.WARNING, "could not found any branches into repository."));
         } catch(IOException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.ERROR, "could not read files from repository."));
+            System.out.println(Message.createMessage(MessageType.ERROR, "could not read files from repository."));
         }
 
         return files;
@@ -97,9 +97,9 @@ public class GitService {
                 }
             }
         } catch(GitAPIException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.WARNING, "could not found any branches into repository."));
+            System.out.println(Message.createMessage(MessageType.WARNING, "could not found any branches into repository."));
         } catch(IOException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.ERROR, "could not read files from repository."));
+            System.out.println(Message.createMessage(MessageType.ERROR, "could not read files from repository."));
         }
 
         return files;
@@ -132,9 +132,9 @@ public class GitService {
         try {
             localRepository = new FileRepository(PATH + "/.git");
             localRepository.create();
-            System.out.println(MessageFactory.createMessage(MessageType.INFO, "repository created."));
+            System.out.println(Message.createMessage(MessageType.INFO, "repository created."));
         } catch(IllegalStateException e) {
-            System.out.println(MessageFactory.createMessage(MessageType.WARNING, "repository already exists."));
+            System.out.println(Message.createMessage(MessageType.WARNING, "repository already exists."));
         }
         git = new Git(localRepository);
     }
