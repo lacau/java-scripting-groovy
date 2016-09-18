@@ -3,6 +3,8 @@ package br.com.java.scripting.groovy.core;
 import java.awt.Color;
 import java.awt.Point;
 
+import br.com.java.scripting.groovy.service.MainDialogService;
+import br.com.java.scripting.groovy.service.ScriptStatus;
 import br.com.java.scripting.groovy.util.CycleHolder;
 import br.com.java.scripting.groovy.view.DrawPanel;
 import br.com.java.scripting.groovy.view.MainDialog;
@@ -25,6 +27,8 @@ public class EngineTask extends Thread {
         stage = new Stage(drawPanel.getWidth(), drawPanel.getHeight());
         drawPanel.setStage(stage);
         drawPanel.setGeometry(createGeometry());
+        MainDialogService.getInstance().showScriptName("default script");
+        MainDialogService.getInstance().showStatus(ScriptStatus.LOADED);
     }
 
     @Override
@@ -34,6 +38,8 @@ public class EngineTask extends Thread {
 
         long lastTime = System.currentTimeMillis();
         long lastRenderTime = System.currentTimeMillis();
+
+        MainDialogService.getInstance().showStatus(ScriptStatus.RUNNING);
 
         try {
             while(true) {

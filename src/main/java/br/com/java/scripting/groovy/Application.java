@@ -8,18 +8,18 @@ import br.com.java.scripting.groovy.message.MessageType;
 import br.com.java.scripting.groovy.service.GitService;
 import br.com.java.scripting.groovy.view.MainDialog;
 
-;
-
 /**
  * Created by lacau on 27/07/16.
  */
 public class Application {
 
+    private static MainDialog mainDialog;
+
     /**
      * Launch the application.
      */
     public static void main(String[] args) {
-        MainDialog dialog = new MainDialog();
+        mainDialog = new MainDialog();
 
         MonitorTask monitorTask = new MonitorTask();
         monitorTask.start();
@@ -32,6 +32,10 @@ public class Application {
             System.exit(0);
         }
 
-        dialog.setVisible(true);
+        mainDialog.setVisible(true);
+    }
+
+    public static MainDialog getMainDialog() {
+        return mainDialog;
     }
 }

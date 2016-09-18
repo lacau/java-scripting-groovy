@@ -6,6 +6,8 @@ package br.com.java.scripting.groovy.view;
 
 import java.awt.Button;
 import java.awt.Color;
+import java.awt.Font;
+import java.awt.Label;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.WindowAdapter;
@@ -26,13 +28,17 @@ public class MainDialog extends JDialog {
 
     private static DrawPanel drawPanel;
 
+    private static Label scriptLabel;
+
+    private static Label statusLabel;
+
     /**
      * Create the dialog.
      */
     public MainDialog() {
         setResizable(false);
         setAutoRequestFocus(false);
-        setBounds(100, 100, 800, 580);
+        setBounds(100, 100, 800, 600);
         getContentPane().setLayout(null);
         contentPanel.setBounds(0, 0, 800, 580);
         contentPanel.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -83,6 +89,17 @@ public class MainDialog extends JDialog {
         btRun.setBounds(10, 75, 100, 23);
         panelMenu.add(btRun);
 
+        scriptLabel = new Label();
+        scriptLabel.setAlignment(Label.CENTER);
+        scriptLabel.setBounds(10, 119, 100, 22);
+        panelMenu.add(scriptLabel);
+
+        statusLabel = new Label();
+        statusLabel.setAlignment(Label.CENTER);
+        statusLabel.setBounds(10, 147, 100, 22);
+        statusLabel.setFont(new Font("Dialog", Font.BOLD, 12));
+        panelMenu.add(statusLabel);
+
         JPanel panelBorder = new JPanel();
         panelBorder.setBorder(new LineBorder(new Color(0, 0, 0)));
         panelBorder.setBounds(12, 12, 644, 556);
@@ -97,5 +114,13 @@ public class MainDialog extends JDialog {
 
     public static DrawPanel getDrawPanel() {
         return drawPanel;
+    }
+
+    public static Label getScriptLabel() {
+        return scriptLabel;
+    }
+
+    public static Label getStatusLabel() {
+        return statusLabel;
     }
 }
