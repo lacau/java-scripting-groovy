@@ -7,7 +7,7 @@ import java.awt.Color;
  */
 public enum ScriptStatus {
 
-    LOADED("name", Color.blue),
+    LOADED("loaded", Color.blue),
     RUNNING("running", new Color(0, 200, 0));
 
     String name;

@@ -35,6 +35,7 @@ public class ScriptsDialog extends JDialog {
 
         Button loadButton = new Button("load");
         loadButton.setBounds(513, 328, 61, 23);
+        loadButton.setEnabled(false);
         getContentPane().add(loadButton);
 
         JScrollPane scrollPane = new JScrollPane();
@@ -52,6 +53,9 @@ public class ScriptsDialog extends JDialog {
 
         scrollPane.setViewportView(table);
         loadFiles();
+
+        if(table.getRowCount() > 0)
+            loadButton.setEnabled(true);
     }
 
     private void loadFiles() {

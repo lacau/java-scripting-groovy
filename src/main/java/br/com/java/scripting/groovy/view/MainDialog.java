@@ -20,6 +20,7 @@ import javax.swing.border.LineBorder;
 import javax.swing.border.TitledBorder;
 
 import br.com.java.scripting.groovy.core.MonitorTask;
+import br.com.java.scripting.groovy.service.CycleService;
 import br.com.java.scripting.groovy.util.GroovyFileChooser;
 
 public class MainDialog extends JDialog {
@@ -65,7 +66,9 @@ public class MainDialog extends JDialog {
             @Override
             public void mouseClicked(MouseEvent e) {
                 GroovyFileChooser fileChooser = new GroovyFileChooser();
-                fileChooser.showOpenDialog(MainDialog.this);
+                if(fileChooser.showOpenDialog(MainDialog.this) == GroovyFileChooser.APPROVE_OPTION) {
+                    CycleService.getInstance().loadNewFile(fileChooser.getSelectedFile());
+                }
             }
         });
         btLoadScript.setBounds(10, 15, 100, 23);

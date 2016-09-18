@@ -23,7 +23,6 @@ public class EngineTask extends Thread {
     public EngineTask() {
         System.out.println("Start EngineTask.");
         drawPanel = MainDialog.getDrawPanel();
-        CycleHolder.refresh(new CycleImpl());
         stage = new Stage(drawPanel.getWidth(), drawPanel.getHeight());
         drawPanel.setStage(stage);
         drawPanel.setGeometry(createGeometry());

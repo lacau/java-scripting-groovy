@@ -1,5 +1,7 @@
 package br.com.java.scripting.groovy.core;
 
+import br.com.java.scripting.groovy.util.CycleHolder;
+
 /**
  * Created by lacau on 10/08/16.
  */
@@ -21,6 +23,7 @@ public class MonitorTask extends Thread {
 
     @Override
     public void run() {
+        CycleHolder.refresh(new CycleImpl());
         try {
             while(alive) {
                 if(running) {
