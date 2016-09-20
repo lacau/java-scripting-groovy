@@ -17,6 +17,8 @@ public class CycleImpl implements Cycle {
 
     private static final int DISTANCE = 3;
 
+    private static final int DIRECTIONS = 8;
+
     private Random random = new Random();
 
     private int direction;
@@ -145,7 +147,7 @@ public class CycleImpl implements Cycle {
     }
 
     private void changeDirection() {
-        direction = random.nextInt(8);
+        direction = random.nextInt(DIRECTIONS);
     }
 
     private void changeColor() {
